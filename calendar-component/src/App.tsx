@@ -1,11 +1,9 @@
-import dayjs from 'dayjs';
 import Calendar from './Calendar';
 
 function App() {
     return (
         <div className="App">
             <Calendar
-                value={dayjs()}
                 onChange={(date) => {
                     console.log(date.format('YYYY-MM-DD'));
                 }}

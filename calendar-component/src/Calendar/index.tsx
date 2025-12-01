@@ -5,9 +5,11 @@ import dayjs, { Dayjs } from 'dayjs';
 import cs from 'classnames';
 import LocaleContext from './LocaleContext';
 import Header from './Header';
+import { useControllableValue } from 'ahooks';
 
 export interface CalendarProps {
-    value: Dayjs;
+    value?: Dayjs;
+    defaultValue?: Dayjs,
     style?: CSSProperties;
     className?: string | string[];
     // 定制日期显示，会完全覆盖日期单元格
@@ -20,17 +22,23 @@ export interface CalendarProps {
 }
 
 function Calendar(props: CalendarProps) {
-    const { value, style, className, onChange } = props;
+    const { style, className, onChange } = props;
 
-    const [curValue, setCurValue] = useState<Dayjs>(value);
-    const [curMonth, setCurMonth] = useState<Dayjs>(value);
+    const [curValue, setCurValue] = useControllableValue<Dayjs>(props, {
+        defaultValue: dayjs()
+    });
+    const [curMonth, setCurMonth] = useState<Dayjs>(curValue);
 
     const classNames = cs('calendar', className);
 
-    function selectHandler(date: Dayjs) {
+    function changeDate(date: Dayjs) {
         setCurValue(date);
         setCurMonth(date);
         onChange?.(date);
+    }
+
+    function selectHandler(date: Dayjs) {
+        changeDate(date)
     }
 
     function prevMonthHandler() {
@@ -43,9 +51,7 @@ function Calendar(props: CalendarProps) {
 
     function todayHandler() {
         const date = dayjs(Date.now());
-        setCurValue(date);
-        setCurMonth(date);
-        onChange?.(date);
+        changeDate(date)
     }
 
     return (

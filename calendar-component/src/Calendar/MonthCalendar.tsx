@@ -44,11 +44,7 @@ function MonthCalendar(props: MonthCalendarProps) {
     const allDays = getAllDays(curMonth);
 
     function renderDays(
-        days: Array<{ date: Dayjs; currentMonth: boolean }>,
-        dateRender: MonthCalendarProps['dateRender'],
-        dateInnerContent: MonthCalendarProps['dateInnerContent'],
-        value: Dayjs,
-        selectHandler: MonthCalendarProps['selectHandler'],
+        days: Array<{ date: Dayjs; currentMonth: boolean }>
     ) {
         const rows = [];
         for (let i = 0; i < 6; i++) {
@@ -70,7 +66,7 @@ function MonthCalendar(props: MonthCalendarProps) {
                                 <div
                                     className={cs(
                                         'calendar-month-body-cell-date-value',
-                                        value.format('YYYY-MM-DD') ===
+                                        value?.format('YYYY-MM-DD') ===
                                             item.date.format('YYYY-MM-DD')
                                             ? 'calendar-month-body-cell-date-selected'
                                             : '',
@@ -103,7 +99,7 @@ function MonthCalendar(props: MonthCalendarProps) {
                 ))}
             </div>
             <div className="calendar-month-body">
-                {renderDays(allDays, dateRender, dateInnerContent, value, selectHandler)}
+                {renderDays(allDays)}
             </div>
         </div>
     );
