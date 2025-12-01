@@ -44,15 +44,24 @@ function MonthCalendar(props: MonthCalendarProps) {
                 row[j] = (
                     <div
                         className={
-                            'calendar-month-body-cell ' + (item.currentMonth ? 'calendar-month-body-cell-current' : '')
+                            'calendar-month-body-cell ' +
+                            (item.currentMonth ? 'calendar-month-body-cell-current' : '')
                         }
                     >
-                        {item.date.date()}
+                        {dateRender ? (
+                            dateRender(item.date)
+                        ) : (
+                            <div className="calendar-month-body-cell-date">
+                                <div className="calendar-month-body-cell-date-value">
+                                    {item.date.date()}
+                                </div>
+                                <div className="calendar-month-body-cell-date-content">
+                                    {dateInnerContent?.(item.date)}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 );
-                {
-                    dateRender ? dateRender(item.date) : item.date.date();
-                }
             }
             rows.push(row);
         }
@@ -70,7 +79,9 @@ function MonthCalendar(props: MonthCalendarProps) {
                     </div>
                 ))}
             </div>
-            <div className="calendar-month-body">{renderDays(allDays, dateRender, dateInnerContent)}</div>
+            <div className="calendar-month-body">
+                {renderDays(allDays, dateRender, dateInnerContent)}
+            </div>
         </div>
     );
 }
