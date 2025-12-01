@@ -6,6 +6,7 @@ function App() {
         <div className="App">
             <Calendar
                 value={dayjs()}
+                locale="en-US"
                 dateInnerContent={(value) => {
                     return (
                         <div>

@@ -1,10 +1,18 @@
 import type { Dayjs } from 'dayjs';
 import type { CalendarProps } from '.';
+import LocaleContext from './LocaleContext';
+import { useContext } from 'react';
+import allLocales from './locale';
 
 interface MonthCalendarProps extends CalendarProps {}
 
 function MonthCalendar(props: MonthCalendarProps) {
+    const localeContext = useContext(LocaleContext);
+
     const { dateRender, dateInnerContent } = props;
+
+    const CalendarLocale = allLocales[localeContext.locale];
+
     function getAllDays(date: Dayjs) {
         const startDate = date.startOf('month');
         const day = startDate.day();
@@ -68,14 +76,14 @@ function MonthCalendar(props: MonthCalendarProps) {
         return rows.map((row) => <div className="calendar-month-body-row">{row}</div>);
     }
 
-    const weekList = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
     return (
         <div className="calendar-month">
             <div className="calendar-month-week-list">
                 {weekList.map((week) => (
                     <div className="calendar-month-week-list-item" key={week}>
-                        {week}
+                        {CalendarLocale.week[week]}
                     </div>
                 ))}
             </div>

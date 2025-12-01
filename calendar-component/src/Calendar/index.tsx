@@ -4,6 +4,7 @@ import MonthCalendar from './MonthCalendar';
 import './index.scss';
 import { Dayjs } from 'dayjs';
 import cs from 'classnames';
+import LocaleContext from './LocaleContext';
 
 export interface CalendarProps {
     value: Dayjs;
@@ -20,13 +21,15 @@ export interface CalendarProps {
 
 function Calendar(props: CalendarProps) {
     const { value, style, className } = props;
-
     const classNames = cs('calendar', className);
+
     return (
-        <div className={classNames} style={style}>
-            <Header />
-            <MonthCalendar {...props} />
-        </div>
+        <LocaleContext.Provider value={{ locale: props.locale || navigator.language }}>
+            <div className={classNames} style={style}>
+                <Header />
+                <MonthCalendar {...props} />
+            </div>
+        </LocaleContext.Provider>
     );
 }
 
