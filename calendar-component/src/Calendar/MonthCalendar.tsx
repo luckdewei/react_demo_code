@@ -3,13 +3,16 @@ import type { CalendarProps } from '.';
 import LocaleContext from './LocaleContext';
 import { useContext } from 'react';
 import allLocales from './locale';
+import cs from 'classnames';
 
-interface MonthCalendarProps extends CalendarProps {}
+interface MonthCalendarProps extends CalendarProps {
+    selectHandler?: (date: Dayjs) => void;
+}
 
 function MonthCalendar(props: MonthCalendarProps) {
     const localeContext = useContext(LocaleContext);
 
-    const { dateRender, dateInnerContent } = props;
+    const { value, dateRender, dateInnerContent, selectHandler } = props;
 
     const CalendarLocale = allLocales[localeContext.locale];
 
@@ -43,6 +46,8 @@ function MonthCalendar(props: MonthCalendarProps) {
         days: Array<{ date: Dayjs; currentMonth: boolean }>,
         dateRender: MonthCalendarProps['dateRender'],
         dateInnerContent: MonthCalendarProps['dateInnerContent'],
+        value: Dayjs,
+        selectHandler: MonthCalendarProps['selectHandler'],
     ) {
         const rows = [];
         for (let i = 0; i < 6; i++) {
@@ -55,12 +60,21 @@ function MonthCalendar(props: MonthCalendarProps) {
                             'calendar-month-body-cell ' +
                             (item.currentMonth ? 'calendar-month-body-cell-current' : '')
                         }
+                        onClick={() => selectHandler?.(item.date)}
                     >
                         {dateRender ? (
                             dateRender(item.date)
                         ) : (
                             <div className="calendar-month-body-cell-date">
-                                <div className="calendar-month-body-cell-date-value">
+                                <div
+                                    className={cs(
+                                        'calendar-month-body-cell-date-value',
+                                        value.format('YYYY-MM-DD') ===
+                                            item.date.format('YYYY-MM-DD')
+                                            ? 'calendar-month-body-cell-date-selected'
+                                            : '',
+                                    )}
+                                >
                                     {item.date.date()}
                                 </div>
                                 <div className="calendar-month-body-cell-date-content">
@@ -88,7 +102,7 @@ function MonthCalendar(props: MonthCalendarProps) {
                 ))}
             </div>
             <div className="calendar-month-body">
-                {renderDays(allDays, dateRender, dateInnerContent)}
+                {renderDays(allDays, dateRender, dateInnerContent, value, selectHandler)}
             </div>
         </div>
     );
