@@ -7,12 +7,13 @@ import cs from 'classnames';
 
 interface MonthCalendarProps extends CalendarProps {
     selectHandler?: (date: Dayjs) => void;
+    curMonth: Dayjs;
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
     const localeContext = useContext(LocaleContext);
 
-    const { value, dateRender, dateInnerContent, selectHandler } = props;
+    const { value, dateRender, dateInnerContent, selectHandler, curMonth } = props;
 
     const CalendarLocale = allLocales[localeContext.locale];
 
@@ -40,7 +41,7 @@ function MonthCalendar(props: MonthCalendarProps) {
         return daysInfo;
     }
 
-    const allDays = getAllDays(props.value);
+    const allDays = getAllDays(curMonth);
 
     function renderDays(
         days: Array<{ date: Dayjs; currentMonth: boolean }>,
